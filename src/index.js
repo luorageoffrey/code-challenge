@@ -1,22 +1,14 @@
 // write your code here
-
 let likesText = document.querySelector('#like-count')
-
 let commentList = document.querySelector('#comments-list')
 
 document.addEventListener('DOMContentLoaded',()=>{
-
-    // console.log("dom content ")
-
+    
     fetch("http://localhost:3000/images/1")
     .then((res)=>res.json())
     .then((res)=>{
         console.log(res)
         let img = res
-
-       //console.log(images)
-
-        // images.forEach((img,index)=>{
 
         let imgTitle = document.querySelector('#card-title')
 
@@ -28,7 +20,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 
         imgElement.setAttribute('src', `${img.image}`)
 
-
         let likeButton = document.querySelector('#like-button')
 
         likeButton.setAttribute('name', `${img.id}`)            
@@ -36,13 +27,9 @@ document.addEventListener('DOMContentLoaded',()=>{
         likeButton.addEventListener('click', handleLike)
     })
 
-
-
     fetch("http://localhost:3000/images/1/comments")
     .then((res)=> res.json())
-    .then((comments)=>{
-
-        
+    .then((comments)=>{       
 
         let commentNodes = []
 
@@ -61,7 +48,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     inputForm.addEventListener('submit', addComment)
 })
 
-
 function addComment(event){
     event.preventDefault()
 
@@ -75,9 +61,7 @@ function addComment(event){
         return res.json()
     }).then((res)=>{
         console.log(res)
-
         //update comment section
-
         let li = document.createElement('li')
 
         li.textContent = res.content
@@ -86,11 +70,9 @@ function addComment(event){
 
         input.value = ""
     })
-
 }
 
 async function postComment(data){
-
     let comment = {       
         "imageId": 1, 
         "content": data
@@ -109,12 +91,10 @@ async function postComment(data){
 
 }
 
-
 let getImageById = async (id)=>{
     return await fetch(`http://localhost:3000/images/${id}`)
     .then((res)=>res.json())
     .then(async (res)=>{
-
         return res
     })
 }
@@ -136,40 +116,28 @@ let updateLike = async (post, id)=>{
             return res
         }
     )
-
     return obj
 }
 
-
 async function handleLike(event) {
-        //event.preventDefault()
-        // get number of likes
-
+         // get number of likes
         let id = event.target.getAttribute('name')
-
         console.log(id)
         // let likes
-
         console.log("some likes")
 
         let obj = await getImageById(id).then((res)=>{
-
             console.log("res", res)
-
             let likes = res.likes + 1
-
             res.likes = likes
             return res
         })
 
         updateLike(obj, id).then((res)=>{
             console.log("updated,", res)
-
             likesText.innerHTML = `${res.likes} likes`
         })
-
-        console.log("obj", obj)            
-       // update(obj, name)
-        // console.log("x", x)
+        console.log("obj", obj)          
+       
 }
 
